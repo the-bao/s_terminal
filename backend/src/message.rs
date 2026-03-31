@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(tag = "type", content = "data")]
+#[serde(tag = "type")]
 pub enum ClientMessage {
     #[serde(rename = "resize")]
     Resize { cols: u16, rows: u16 },
@@ -12,14 +12,14 @@ pub enum ClientMessage {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(tag = "type", content = "data")]
+#[serde(tag = "type")]
 pub enum ServerMessage {
     #[serde(rename = "output")]
     Output { data: String },
     #[serde(rename = "pong")]
     Pong,
     #[serde(rename = "error")]
-    Error { message: String },
+    Error { data: String },
     #[serde(rename = "connected")]
     Connected,
 }

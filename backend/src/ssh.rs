@@ -24,9 +24,7 @@ impl SshManager {
 
     pub fn connect(&self, id: &str, host: &str, port: u16, username: &str, password: &str) -> Result<(), String> {
         let addr = format!("{}:{}", host, port);
-        let mut stream = TcpStream::connect(&addr).map_err(|e| e.to_string())?;
-        stream.set_read_timeout(Some(std::time::Duration::from_secs(60)))
-              .map_err(|e| e.to_string())?;
+        let stream = TcpStream::connect(&addr).map_err(|e| e.to_string())?;
 
         let mut session = Session::new().map_err(|e| e.to_string())?;
         session.set_tcp_stream(stream.try_clone().map_err(|e| e.to_string())?);
@@ -37,6 +35,9 @@ impl SshManager {
         if !session.authenticated() {
             return Err("Authentication failed".to_string());
         }
+
+        // Set SSH session timeout (200ms) so channel reads don't block indefinitely
+        session.set_timeout(200);
 
         // Open a shell channel
         let mut channel = session.channel_session().map_err(|e| e.to_string())?;
@@ -62,23 +63,29 @@ impl SshManager {
     }
 
     pub fn write(&self, id: &str, data: &[u8]) -> Result<(), String> {
-        let sessions = self.sessions.lock();
-        let ssh = sessions.get(id).ok_or("Session not found")?;
+        let ssh = {
+            let sessions = self.sessions.lock();
+            sessions.get(id).ok_or("Session not found")?.clone()
+        };
         let mut ssh = ssh.lock();
         ssh.channel.write(data).map_err(|e| e.to_string())?;
         Ok(())
     }
 
     pub fn read(&self, id: &str, buf: &mut [u8]) -> Result<usize, String> {
-        let sessions = self.sessions.lock();
-        let ssh = sessions.get(id).ok_or("Session not found")?;
+        let ssh = {
+            let sessions = self.sessions.lock();
+            sessions.get(id).ok_or("Session not found")?.clone()
+        };
         let mut ssh = ssh.lock();
         ssh.channel.read(buf).map_err(|e| e.to_string())
     }
 
     pub fn resize(&self, id: &str, cols: u16, rows: u16) -> Result<(), String> {
-        let sessions = self.sessions.lock();
-        let ssh = sessions.get(id).ok_or("Session not found")?;
+        let ssh = {
+            let sessions = self.sessions.lock();
+            sessions.get(id).ok_or("Session not found")?.clone()
+        };
         let mut ssh = ssh.lock();
         ssh.channel.request_pty_size(cols as u32, rows as u32, None, None).map_err(|e| e.to_string())?;
         Ok(())

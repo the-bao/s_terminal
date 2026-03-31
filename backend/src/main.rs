@@ -11,6 +11,12 @@ use tokio_tungstenite::accept_hdr_async;
 use log::{info, error};
 use tokio_tungstenite::tungstenite::http::Request;
 
+fn percent_decode(s: &str) -> String {
+    percent_encoding::percent_decode_str(s)
+        .decode_utf8_lossy()
+        .to_string()
+}
+
 #[derive(Clone)]
 struct SshParams {
     host: String,
@@ -46,10 +52,10 @@ async fn main() {
                         let parts: Vec<&str> = after_ssh.split('/').collect();
                         if parts.len() >= 4 {
                             let params = SshParams {
-                                host: parts[0].to_string(),
+                                host: percent_decode(parts[0]),
                                 port: parts[1].parse().unwrap_or(22),
-                                username: parts[2].to_string(),
-                                password: parts[3].to_string(),
+                                username: percent_decode(parts[2]),
+                                password: percent_decode(parts[3]),
                             };
                             // Send params through channel
                             let _ = tx.send(params);
