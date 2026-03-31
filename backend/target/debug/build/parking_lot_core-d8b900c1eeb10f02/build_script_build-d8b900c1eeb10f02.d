@@ -1,0 +1,5 @@
+/home/developer/code/s_terminal/backend/target/debug/build/parking_lot_core-d8b900c1eeb10f02/build_script_build-d8b900c1eeb10f02.d: /home/developer/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/parking_lot_core-0.9.12/build.rs
+
+/home/developer/code/s_terminal/backend/target/debug/build/parking_lot_core-d8b900c1eeb10f02/build_script_build-d8b900c1eeb10f02: /home/developer/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/parking_lot_core-0.9.12/build.rs
+
+/home/developer/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/parking_lot_core-0.9.12/build.rs:
