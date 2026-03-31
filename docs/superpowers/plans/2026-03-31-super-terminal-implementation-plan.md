@@ -916,7 +916,6 @@ export function Terminal({ sessionId, host, port, username }: TerminalProps) {
       setTimeout(handleResize, 100);
     }
 
-    onPasswordSubmit(password);
     connect();
   };
 
