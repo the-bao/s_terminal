@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { Terminal as XTerm } from '@xterm/xterm';
 import { FitAddon } from '@xterm/addon-fit';
 import { useWebSocket } from '../hooks/useWebSocket';
@@ -14,6 +14,7 @@ export function Terminal({ sessionId, host, port, username }: TerminalProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const xtermRef = useRef<XTerm | null>(null);
   const fitAddonRef = useRef<FitAddon | null>(null);
+  const resizeHandlerRef = useRef<(() => void) | null>(null);
   const [password, setPassword] = useState('');
   const [isConnecting, setIsConnecting] = useState(false);
 
@@ -62,6 +63,7 @@ export function Terminal({ sessionId, host, port, username }: TerminalProps) {
         fitAddon.fit();
         send({ type: 'resize', cols: xterm.cols, rows: xterm.rows });
       };
+      resizeHandlerRef.current = handleResize;
       window.addEventListener('resize', handleResize);
       setTimeout(handleResize, 100);
     }
@@ -74,6 +76,15 @@ export function Terminal({ sessionId, host, port, username }: TerminalProps) {
       handleConnect();
     }
   };
+
+  // Cleanup resize listener on unmount
+  useEffect(() => {
+    return () => {
+      if (resizeHandlerRef.current) {
+        window.removeEventListener('resize', resizeHandlerRef.current);
+      }
+    };
+  }, []);
 
   // Show password prompt
   if (!password || isConnecting) {
