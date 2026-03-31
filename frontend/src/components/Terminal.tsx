@@ -77,11 +77,15 @@ export function Terminal({ sessionId, host, port, username }: TerminalProps) {
     }
   };
 
-  // Cleanup resize listener on unmount
+  // Cleanup resize listener and dispose xterm on unmount
   useEffect(() => {
     return () => {
       if (resizeHandlerRef.current) {
         window.removeEventListener('resize', resizeHandlerRef.current);
+      }
+      if (xtermRef.current) {
+        xtermRef.current.dispose();
+        xtermRef.current = null;
       }
     };
   }, []);
