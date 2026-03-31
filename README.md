@@ -21,7 +21,7 @@ A web-based SSH session manager with multi-tab support, designed for iPad browse
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                      iPad Browser                         │
+│                      Browser                              │
 │  ┌──────────┐  ┌──────────────────────────────────────┐ │
 │  │ Session  │  │           xterm.js Terminal          │ │
 │  │ Manager  │  │                                      │ │
