@@ -120,10 +120,9 @@ s_terminal/
 
 ### WebSocket 端点
 
-`GET /ssh/{session_id}?host={host}&port={port}&username={username}`
+`GET /ssh/{host}/{port}/{username}/{password}`
 
-- path param `session_id`: 会话唯一 ID
-- query params: SSH 连接参数
+- path params: SSH 连接参数（密码在 URL 路径中传输）
 - 服务端建立 SSH 连接后，透传所有输入输出
 
 ### 连接流程
