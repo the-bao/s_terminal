@@ -22,3 +22,12 @@ npm-debug.log*
 # Environment
 .env
 .env.local
+
+# Playwright MCP
+.playwright-mcp/
+
+# Docs
+docs/
+
+# Claude Code
+.claude/
