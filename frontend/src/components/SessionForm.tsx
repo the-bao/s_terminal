@@ -19,19 +19,14 @@ export function SessionForm({ initialSession, onSubmit, onCancel }: SessionFormP
     onSubmit({ name, host, port, username });
   };
 
+  const inputClass =
+    'w-full px-3 py-2.5 bg-bg-elevated border border-border-default rounded-md text-text-primary text-sm placeholder:text-text-muted focus:border-accent-primary focus:outline-none transition-colors';
+
   return (
-    <form
-      onSubmit={handleSubmit}
-      style={{
-        padding: '20px',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '16px',
-      }}
-    >
+    <form onSubmit={handleSubmit} className="p-4 flex flex-col gap-3.5">
       <div>
-        <label style={{ display: 'block', marginBottom: '4px', color: '#ccc' }}>
-          Session Name *
+        <label className="block mb-1.5 text-text-secondary text-xs font-medium">
+          Label *
         </label>
         <input
           type="text"
@@ -39,20 +34,12 @@ export function SessionForm({ initialSession, onSubmit, onCancel }: SessionFormP
           onChange={(e) => setName(e.target.value)}
           placeholder="My Server"
           required
-          style={{
-            width: '100%',
-            padding: '12px',
-            backgroundColor: '#3d3d3d',
-            border: '1px solid #555',
-            borderRadius: '4px',
-            color: '#fff',
-            fontSize: '16px',
-          }}
+          className={inputClass}
         />
       </div>
 
       <div>
-        <label style={{ display: 'block', marginBottom: '4px', color: '#ccc' }}>
+        <label className="block mb-1.5 text-text-secondary text-xs font-medium">
           Host *
         </label>
         <input
@@ -61,20 +48,12 @@ export function SessionForm({ initialSession, onSubmit, onCancel }: SessionFormP
           onChange={(e) => setHost(e.target.value)}
           placeholder="192.168.1.100"
           required
-          style={{
-            width: '100%',
-            padding: '12px',
-            backgroundColor: '#3d3d3d',
-            border: '1px solid #555',
-            borderRadius: '4px',
-            color: '#fff',
-            fontSize: '16px',
-          }}
+          className={inputClass}
         />
       </div>
 
       <div>
-        <label style={{ display: 'block', marginBottom: '4px', color: '#ccc' }}>
+        <label className="block mb-1.5 text-text-secondary text-xs font-medium">
           Port
         </label>
         <input
@@ -82,20 +61,12 @@ export function SessionForm({ initialSession, onSubmit, onCancel }: SessionFormP
           value={port}
           onChange={(e) => setPort(parseInt(e.target.value) || 22)}
           placeholder="22"
-          style={{
-            width: '100%',
-            padding: '12px',
-            backgroundColor: '#3d3d3d',
-            border: '1px solid #555',
-            borderRadius: '4px',
-            color: '#fff',
-            fontSize: '16px',
-          }}
+          className={inputClass}
         />
       </div>
 
       <div>
-        <label style={{ display: 'block', marginBottom: '4px', color: '#ccc' }}>
+        <label className="block mb-1.5 text-text-secondary text-xs font-medium">
           Username *
         </label>
         <input
@@ -104,49 +75,21 @@ export function SessionForm({ initialSession, onSubmit, onCancel }: SessionFormP
           onChange={(e) => setUsername(e.target.value)}
           placeholder="root"
           required
-          style={{
-            width: '100%',
-            padding: '12px',
-            backgroundColor: '#3d3d3d',
-            border: '1px solid #555',
-            borderRadius: '4px',
-            color: '#fff',
-            fontSize: '16px',
-          }}
+          className={inputClass}
         />
       </div>
 
-      <div style={{ display: 'flex', gap: '12px', marginTop: '8px' }}>
+      <div className="flex gap-3 mt-1">
         <button
           type="submit"
-          style={{
-            flex: 1,
-            padding: '14px',
-            backgroundColor: '#007acc',
-            border: 'none',
-            borderRadius: '4px',
-            color: '#fff',
-            fontSize: '16px',
-            cursor: 'pointer',
-            minHeight: '44px',
-          }}
+          className="flex-1 py-2.5 bg-accent-primary hover:bg-accent-hover text-white text-sm rounded-md cursor-pointer transition-colors font-medium"
         >
-          {initialSession ? 'Update' : 'Add'} Session
+          {initialSession ? 'Update' : 'Add Host'}
         </button>
         <button
           type="button"
           onClick={onCancel}
-          style={{
-            flex: 1,
-            padding: '14px',
-            backgroundColor: '#555',
-            border: 'none',
-            borderRadius: '4px',
-            color: '#fff',
-            fontSize: '16px',
-            cursor: 'pointer',
-            minHeight: '44px',
-          }}
+          className="flex-1 py-2.5 bg-bg-elevated hover:bg-bg-overlay text-text-secondary text-sm rounded-md cursor-pointer border border-border-default transition-colors"
         >
           Cancel
         </button>

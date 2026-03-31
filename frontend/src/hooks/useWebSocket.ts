@@ -8,7 +8,7 @@ interface UseWebSocketOptions {
   username: string;
   password: string;
   onMessage: (data: string) => void;
-  onConnect?: () => void;
+  onSshConnect?: () => void;
   onError?: (error: string) => void;
 }
 
@@ -19,11 +19,12 @@ export function useWebSocket({
   username,
   password,
   onMessage,
-  onConnect,
+  onSshConnect,
   onError,
 }: UseWebSocketOptions) {
   const wsRef = useRef<WebSocket | null>(null);
-  const [connected, setConnected] = useState(false);
+  const [wsConnected, setWsConnected] = useState(false);
+  const [sshReady, setSshReady] = useState(false);
 
   const connect = useCallback(() => {
     if (wsRef.current?.readyState === WebSocket.OPEN) {
@@ -31,14 +32,13 @@ export function useWebSocket({
     }
 
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const wsUrl = `${protocol}//${window.location.host}/ssh/${host}/${port}/${username}/${password}`;
+    const wsUrl = `${protocol}//${window.location.host}/ssh/${encodeURIComponent(host)}/${port}/${encodeURIComponent(username)}/${encodeURIComponent(password)}`;
 
     const ws = new WebSocket(wsUrl);
     wsRef.current = ws;
 
     ws.onopen = () => {
-      setConnected(true);
-      onConnect?.();
+      setWsConnected(true);
     };
 
     ws.onmessage = (event) => {
@@ -47,9 +47,10 @@ export function useWebSocket({
         if (msg.type === 'output') {
           onMessage(msg.data);
         } else if (msg.type === 'error') {
-          onError?.(msg.message);
+          onError?.(msg.data);
         } else if (msg.type === 'connected') {
-          // Initial connection confirmed
+          setSshReady(true);
+          onSshConnect?.();
         }
       } catch {
         onMessage(event.data);
@@ -61,14 +62,16 @@ export function useWebSocket({
     };
 
     ws.onclose = () => {
-      setConnected(false);
+      setWsConnected(false);
+      setSshReady(false);
     };
-  }, [host, port, username, password, onMessage, onConnect, onError]);
+  }, [host, port, username, password, onMessage, onSshConnect, onError]);
 
   const disconnect = useCallback(() => {
     wsRef.current?.close();
     wsRef.current = null;
-    setConnected(false);
+    setWsConnected(false);
+    setSshReady(false);
   }, []);
 
   const send = useCallback((msg: ClientMessage) => {
@@ -83,5 +86,5 @@ export function useWebSocket({
     };
   }, [disconnect]);
 
-  return { connect, disconnect, send, connected };
+  return { connect, disconnect, send, wsConnected, sshReady };
 }

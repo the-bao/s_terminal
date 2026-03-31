@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import '@xterm/xterm/css/xterm.css';
 import { Session } from './types/session';
 import { useSessions } from './hooks/useSessions';
 import { SessionManager } from './components/SessionManager';
@@ -8,7 +7,7 @@ import { Terminal } from './components/Terminal';
 
 interface OpenTab {
   session: Session;
-  key: string; // unique key for React list
+  key: string;
 }
 
 function App() {
@@ -17,14 +16,11 @@ function App() {
   const [activeTabKey, setActiveTabKey] = useState<string | null>(null);
 
   const handleSelectSession = (session: Session) => {
-    // Check if already open
     const existing = openTabs.find((t) => t.session.id === session.id);
     if (existing) {
       setActiveTabKey(existing.key);
       return;
     }
-
-    // Open new tab
     const key = `${session.id}-${Date.now()}`;
     setOpenTabs((prev) => [...prev, { session, key }]);
     setActiveTabKey(key);
@@ -45,28 +41,16 @@ function App() {
   const activeTab = openTabs.find((t) => t.key === activeTabKey);
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100vh',
-        backgroundColor: '#1e1e1e',
-      }}
-    >
+    <div className="flex flex-col h-screen bg-bg-base text-text-primary">
       {/* Header */}
-      <div
-        style={{
-          backgroundColor: '#323233',
-          padding: '12px 16px',
-          borderBottom: '1px solid #3d3d3d',
-          display: 'flex',
-          alignItems: 'center',
-        }}
-      >
-        <h1 style={{ margin: 0, fontSize: '18px', color: '#fff' }}>Super Terminal</h1>
+      <div className="bg-bg-surface px-5 py-3 border-b border-border-default flex items-center gap-3">
+        <div className="w-2 h-2 rounded-full bg-accent-success shadow-[0_0_6px_rgba(63,185,80,0.5)]" />
+        <h1 className="text-base font-semibold text-text-primary tracking-wide m-0">
+          Super Terminal
+        </h1>
       </div>
 
-      <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
+      <div className="flex flex-1 overflow-hidden">
         {/* Session Manager Sidebar */}
         <SessionManager
           sessions={sessions}
@@ -77,7 +61,7 @@ function App() {
         />
 
         {/* Main Content */}
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <div className="flex-1 flex flex-col min-w-0">
           {/* Tab Bar */}
           {openTabs.length > 0 && (
             <TabBar
@@ -96,7 +80,7 @@ function App() {
 
           {/* Terminal Area */}
           {activeTab ? (
-            <div style={{ flex: 1 }}>
+            <div className="flex-1 min-h-0">
               <Terminal
                 sessionId={activeTab.session.id}
                 host={activeTab.session.host}
@@ -105,15 +89,7 @@ function App() {
               />
             </div>
           ) : (
-            <div
-              style={{
-                flex: 1,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#888',
-              }}
-            >
+            <div className="flex-1 flex items-center justify-center text-text-muted text-sm">
               Select a session from the sidebar to connect
             </div>
           )}

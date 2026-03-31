@@ -1,0 +1,47 @@
+@import "tailwindcss";
+@import "@xterm/xterm/css/xterm.css";
+
+@theme {
+  --color-bg-base: #0d1117;
+  --color-bg-surface: #161b22;
+  --color-bg-elevated: #21262d;
+  --color-bg-overlay: #1c2128;
+  --color-border-default: #30363d;
+  --color-border-muted: #21262d;
+  --color-text-primary: #e6edf3;
+  --color-text-secondary: #8b949e;
+  --color-text-muted: #484f58;
+  --color-accent-primary: #58a6ff;
+  --color-accent-hover: #79c0ff;
+  --color-accent-danger: #f85149;
+  --color-accent-success: #3fb950;
+}
+
+/* Custom xterm overrides for Termius feel */
+.xterm {
+  padding: 8px;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg-surface);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-default);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-bg-base);
+  color: var(--color-text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}

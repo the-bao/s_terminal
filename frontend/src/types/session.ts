@@ -25,7 +25,7 @@ export type ServerMessage = {
   type: 'pong';
 } | {
   type: 'error';
-  message: string;
+  data: string;
 } | {
   type: 'connected';
 };

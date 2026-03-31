@@ -31,50 +31,22 @@ export function SessionManager({
   };
 
   return (
-    <div
-      style={{
-        width: '280px',
-        backgroundColor: '#252526',
-        borderRight: '1px solid #3d3d3d',
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100%',
-      }}
-    >
-      <div
-        style={{
-          padding: '16px',
-          borderBottom: '1px solid #3d3d3d',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
-        <h2 style={{ margin: 0, fontSize: '16px', color: '#fff' }}>Sessions</h2>
+    <div className="w-[280px] bg-bg-surface border-r border-border-default flex flex-col h-full shrink-0">
+      {/* Header */}
+      <div className="px-4 py-4 border-b border-border-default flex justify-between items-center">
+        <h2 className="text-sm font-semibold text-text-primary m-0">Hosts</h2>
         <button
           onClick={() => {
             setEditingSession(null);
             setShowForm(true);
           }}
-          style={{
-            padding: '8px 12px',
-            backgroundColor: '#007acc',
-            border: 'none',
-            borderRadius: '4px',
-            color: '#fff',
-            fontSize: '14px',
-            cursor: 'pointer',
-            minWidth: '44px',
-            minHeight: '44px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
+          className="px-3 py-1.5 bg-accent-primary hover:bg-accent-hover text-white text-xs rounded-md cursor-pointer transition-colors font-medium"
         >
-          + Add
+          + New Host
         </button>
       </div>
 
+      {/* Form */}
       {showForm && (
         <SessionForm
           initialSession={editingSession || undefined}
@@ -86,50 +58,32 @@ export function SessionManager({
         />
       )}
 
-      <div style={{ flex: 1, overflowY: 'auto', padding: '8px' }}>
+      {/* Session List */}
+      <div className="flex-1 overflow-y-auto p-3 space-y-2">
         {sessions.map((session) => (
           <div
             key={session.id}
             onClick={() => onSelectSession(session)}
-            style={{
-              padding: '12px',
-              marginBottom: '8px',
-              backgroundColor: '#2d2d2d',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              minHeight: '44px',
-            }}
+            className="group p-3 bg-bg-elevated hover:bg-bg-overlay rounded-lg cursor-pointer transition-all duration-150 border border-transparent hover:border-border-default"
           >
-            <div style={{ color: '#fff', fontWeight: 500, marginBottom: '4px' }}>
-              {session.name}
+            <div className="flex items-center gap-2 mb-1.5">
+              {/* Status dot */}
+              <div className="w-1.5 h-1.5 rounded-full bg-text-muted shrink-0" />
+              <span className="text-text-primary font-medium text-sm truncate">
+                {session.name}
+              </span>
             </div>
-            <div style={{ color: '#888', fontSize: '12px' }}>
+            <div className="text-text-secondary text-xs pl-3.5 truncate">
               {session.username}@{session.host}:{session.port}
             </div>
-            <div
-              style={{
-                marginTop: '8px',
-                display: 'flex',
-                gap: '8px',
-              }}
-            >
+            <div className="mt-2.5 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   setEditingSession(session);
                   setShowForm(true);
                 }}
-                style={{
-                  padding: '6px 10px',
-                  backgroundColor: '#3d3d3d',
-                  border: 'none',
-                  borderRadius: '4px',
-                  color: '#ccc',
-                  fontSize: '12px',
-                  cursor: 'pointer',
-                  minWidth: '44px',
-                  minHeight: '36px',
-                }}
+                className="px-2 py-1 bg-transparent border border-border-default rounded text-text-secondary text-xs cursor-pointer hover:text-text-primary hover:border-text-muted transition-colors"
               >
                 Edit
               </button>
@@ -140,17 +94,7 @@ export function SessionManager({
                     onDeleteSession(session.id);
                   }
                 }}
-                style={{
-                  padding: '6px 10px',
-                  backgroundColor: '#d32f2f',
-                  border: 'none',
-                  borderRadius: '4px',
-                  color: '#fff',
-                  fontSize: '12px',
-                  cursor: 'pointer',
-                  minWidth: '44px',
-                  minHeight: '36px',
-                }}
+                className="px-2 py-1 bg-transparent border border-accent-danger/30 rounded text-accent-danger text-xs cursor-pointer hover:bg-accent-danger/10 transition-colors"
               >
                 Delete
               </button>
@@ -159,10 +103,10 @@ export function SessionManager({
         ))}
 
         {sessions.length === 0 && !showForm && (
-          <div style={{ color: '#888', textAlign: 'center', padding: '20px' }}>
-            No sessions yet.
+          <div className="text-text-muted text-center py-8 text-sm">
+            No hosts yet.
             <br />
-            Click "+ Add" to create one.
+            Click <span className="text-accent-primary">"+ New Host"</span> to add one.
           </div>
         )}
       </div>
