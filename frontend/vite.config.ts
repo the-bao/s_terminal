@@ -7,7 +7,7 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/ssh': {
-        target: 'ws://localhost:8080',
+        target: 'ws://localhost:8081',
         ws: true,
       },
     },

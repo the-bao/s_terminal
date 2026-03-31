@@ -25,8 +25,8 @@ async fn main() {
     info!("Starting Super Terminal server...");
 
     let ssh_manager = Arc::new(SshManager::new());
-    let listener = TcpListener::bind("0.0.0.0:8080").await.unwrap();
-    info!("Listening on ws://0.0.0.0:8080");
+    let listener = TcpListener::bind("0.0.0.0:8081").await.unwrap();
+    info!("Listening on ws://0.0.0.0:8081");
 
     while let Ok((stream, addr)) = listener.accept().await {
         info!("New connection from {}", addr);
